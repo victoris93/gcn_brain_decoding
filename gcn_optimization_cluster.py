@@ -387,7 +387,7 @@ DATA["avg_acc_test"] = avg_acc_test
 DATA["loss_tests"] = loss_tests
 DATA["loss_trains"] = loss_trains
 
-filehandler = open(f"{clusterPath}/DL_project/trained_model_{LEARNING_RATE}_{EPOCHS}_{BATCH_SIZE}_{CHEB_CHANNELS}_{CHEB_K}_{FC_NEURONS}.pkl","wb")
+filehandler = open(f"{clusterPath}/DL_project/trained_model_{LEARNING_RATE}_{EPOCHS}_{BATCH_SIZE}_{CHEB_CHANNELS}_{CHEB_K}_{FC_NEURONS}_{OPTIM}_{LOSS}.pkl","wb")
 pickle.dump(DATA,filehandler)
 filehandler.close()
 
