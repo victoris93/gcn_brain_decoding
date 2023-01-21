@@ -1,5 +1,17 @@
-# gcn_brain_decoding
-Project for the deep learning class 
+# Decoding 
+In this project, we optimize each argument separately:
+- loss function
+- optimizer
+- N of fully connected neurons
+- N of graph filters at each Cheb convolution layer
+- N of output channels
+- Batch size
+- N of epochs
+- Learning rate
+
+We used a computer cluster to train ~ 10 models in parallel for each parameter.
+
+The initial model is described [here](https://main-educational.github.io/brain_encoding_decoding/gcn_decoding.html)
 
 # Running models on a Slurm cluster
 
