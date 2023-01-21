@@ -1,4 +1,4 @@
-# Decoding 
+# Decoding Task from fMRI Activity with GCN
 In this project, we optimize each argument separately:
 - loss function
 - optimizer
