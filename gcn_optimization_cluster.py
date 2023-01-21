@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
 import random
 import pickle
 from torch.utils.data import DataLoader
@@ -23,7 +22,7 @@ from nilearn import plotting
 import matplotlib.pyplot as plt
 import sys
 
-clusterPath = "/gpfs3/well/margulies/users/cpy397"
+clusterPath = "/gpfs3/well/margulies/users/cpy397" # the data are on the cluster
 data_path = clusterPath + "/haxby2001"
 
 LEARNING_RATE = float(sys.argv[1])
@@ -44,9 +43,6 @@ DATA = {
     "fc_neurons": FC_NEURONS,
 }
 
-
-# In[3]:
-
 warnings.filterwarnings(action='once')
 
 # Standardizing
@@ -60,15 +56,10 @@ behavioral = pd.read_csv(task_labels, delimiter=' ')
 X = masker.fit_transform(func_file)
 y = behavioral['labels']
 
-# In[4]:
-
 categories = y.unique()
 print(categories)
 print('y:', y.shape)
 print('X:', X.shape)
-
-
-# In[5]:
 
 
 # Estimating connectomes and save for pytorch to load
@@ -89,19 +80,8 @@ display = plotting.plot_matrix(corr_matrix_z, vmax=1, vmin=-1,
                                colorbar=True, title=title)
 
 
-# In[6]:
-
-
 adj_sparse = tg.utils.dense_to_sparse(torch.from_numpy(corr_matrix_z))
 graph = tg.data.Data(edge_index=adj_sparse[0], edge_attr=adj_sparse[1])
-
-
-# # Prepare Data
-
-# In[7]:
-
-
-# generate data
 
 # cancatenate the same type of trials
 concat_bold = {}
@@ -109,9 +89,6 @@ for label in categories:
     cur_label_index = y.index[y == label].tolist()
     curr_bold_seg = X[cur_label_index]
     concat_bold[label] = curr_bold_seg
-
-
-# In[8]:
 
 
 # split the data by time window size and save to file
@@ -149,14 +126,6 @@ for label, ts_data in concat_bold.items():
 
 label_df.to_csv(out_csv, index=False)
 
-
-# # Data Loaders
-
-# In[9]:
-
-
-# split dataset
-
 random_seed = 0
 
 train_dataset = TimeWindowsDataset(
@@ -188,10 +157,7 @@ print("valid dataset: {}".format(valid_dataset))
 print("test dataset: {}".format(test_dataset))
 
 
-# In[10]:
-
-
-batch_size = 10
+batch_size = BATCH_SIZE
 
 torch.manual_seed(random_seed)
 train_generator = DataLoader(
@@ -206,11 +172,6 @@ print(
     f"Labels batch shape: {train_labels.size()}; mean {torch.mean(torch.Tensor.float(train_labels))}")
 
 
-# # Define Model
-
-# In[11]:
-
-
 class GCN(torch.nn.Module):
     def __init__(self, edge_index, edge_weight, n_roi, n_timepoints, n_classes, cheb_channels, cheb_k, fc_neurons):
         super().__init__()
@@ -218,9 +179,7 @@ class GCN(torch.nn.Module):
         self.edge_weight = edge_weight
         self.n_roi = n_roi
         self.last_out_channels = 4
-
-        #self.batch_norm = m = nn.BatchNorm2d(self.batch_size)
-
+        #self.batch_norm = m = nn.BatchNorm2d(self.batch_size) didn't work
         self.conv1 = tg.nn.ChebConv(
             in_channels=n_timepoints, out_channels=cheb_channels, K=cheb_k, bias=True
         )
@@ -275,21 +234,12 @@ class GCN(torch.nn.Module):
         return x
 
 
-# In[12]:
-
-
 gcn = GCN(graph.edge_index,
           graph.edge_attr,
           X.shape[1],
           window_length,
           len(categories),
           CHEB_CHANNELS, CHEB_K, FC_NEURONS)
-
-
-# # Model Evaluation
-
-# In[13]:
-
 
 def train_loop(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
@@ -328,17 +278,11 @@ def valid_test_loop(dataloader, model, loss_fn):
 
     return loss, correct
 
-
-# In[14]:
-
-
 avg_acc_train = []
 avg_acc_test = []
 loss_trains = []
 loss_tests = []
 
-
-# In[ ]:
 
 if LOSS == "cel":
     loss_fn = torch.nn.CrossEntropyLoss()
@@ -354,19 +298,34 @@ elif LOSS == "KLDiv":
     loss_fn = torch.nn.KLDivLoss()
 
 if OPTIM == "adam":
-    optimizer = torch.optim.Adam(
-    gcn.parameters(), lr=LEARNING_RATE, weight_decay=5e-4, amsgrad=True)
+    optimizer = torch.optim.Adam(gcn.parameters(), lr=LEARNING_RATE, weight_decay=5e-4, amsgrad=True)
 elif OPTIM == "sgd":
     optimizer = torch.optim.SGD(gcn.parameters(), lr=LEARNING_RATE, momentum=0.9)
-
-
-# In[ ]:
+elif OPTIM == "adamax":
+    optimizer = torch.optim.Adamax(gcn.parameters(), lr=LEARNING_RATE, weight_decay=5e-4)
+elif OPTIM == "asgd":
+    optimizer = torch.optim.ASGD(gcn.parameters(), lr=LEARNING_RATE, weight_decay=5e-4)
+elif OPTIM == "rprop":
+    optimizer = torch.optim.Rprop(gcn.parameters(), lr=LEARNING_RATE)
+elif OPTIM == "rmsprop":
+    optimizer = torch.optim.RMSprop(gcn.parameters(), lr=LEARNING_RATE, weight_decay=5e-4)
+elif OPTIM == "adagrad":
+    optimizer = torch.optim.Adagrad(gcn.parameters(), lr=LEARNING_RATE, weight_decay=5e-4, lr_decay = 5e-4)
+elif OPTIM == "adadelta":
+    optimizer = torch.optim.Adadelta(gcn.parameters(), lr=LEARNING_RATE, weight_decay=5e-4)
+elif OPTIM == "radam":
+    optimizer = torch.optim.RAdam(gcn.parameters(), lr=LEARNING_RATE, weight_decay=5e-4)
+elif OPTIM == "nadam":
+    optimizer = torch.optim.NAdam(gcn.parameters(), lr=LEARNING_RATE, weight_decay=5e-4)
+elif OPTIM == "adamw":
+    optimizer = torch.optim.AdamW(gcn.parameters(), lr=LEARNING_RATE, weight_decay=5e-4)
+elif OPTIM == "sparseadam":
+    optimizer = torch.optim.SparseAdam(gcn.parameters(), lr=LEARNING_RATE)
 
 
 epochs = EPOCHS
 
 for t in range(epochs):
-    #print(f"Epoch {t+1}/{epochs}\n-------------------------------")
     train_loop(train_generator, gcn, loss_fn, optimizer)
     loss_train, correct_train = valid_test_loop(valid_generator, gcn, loss_fn)
     loss_test, correct_test = valid_test_loop(test_generator, gcn, loss_fn)
@@ -374,10 +333,7 @@ for t in range(epochs):
     avg_acc_test.append(correct_test)
     loss_trains.append(loss_train)
     loss_tests.append(loss_test)
-#    print(
-#        f"Valid train metrics:\n\t avg_loss: {loss_train:>8f};\t avg_accuracy: {(100*correct_train):>0.1f}%")
-#    print(
-#        f"Valid test metrics:\n\t avg_loss: {loss_test:>8f};\t avg_accuracy: {(100*correct_test):>0.1f}%")
+
 
 DATA["model"] = str(gcn)
 DATA["optimizer"] = OPTIM
@@ -390,45 +346,3 @@ DATA["loss_trains"] = loss_trains
 filehandler = open(f"{clusterPath}/DL_project/trained_model_{LEARNING_RATE}_{EPOCHS}_{BATCH_SIZE}_{CHEB_CHANNELS}_{CHEB_K}_{FC_NEURONS}_{OPTIM}_{LOSS}.pkl","wb")
 pickle.dump(DATA,filehandler)
 filehandler.close()
-
-# In[1]:
-
-
-# print(
-# f"Valid metrics:\n\t avg_loss: {loss_train:>8f};\t avg_accuracy: {(100*avg_acc_test[-1]):>0.1f}%")
-
-
-# In[ ]:
-
-
-#np.asarray(np.arange(epochs)) + 1
-
-
-# In[2]:
-
-
-#fig = plt.figure(figsize=(7, 6))
-#plt.plot(np.asarray(np.arange(len(loss_trains)) + 1).astype("str"), loss_trains)
-#plt.plot(np.asarray(np.arange(len(loss_tests)) + 1).astype("str"), loss_tests)
-# plt.ylabel("Loss")
-# plt.xlabel("Epoch")
-#fig.legend(labels=['Train', 'Test'], bbox_to_anchor=(0, 0, 0.9, 0.5))
-# plt.show()
-
-
-# In[ ]:
-
-
-#fig = plt.figure(figsize=(7, 6))
-#plt.plot(np.asarray(np.arange(len(loss_tests)) + 1).astype("str"), avg_acc_train)
-#plt.plot(np.asarray(np.arange(len(loss_tests)) + 1).astype("str"), avg_acc_test)
-# plt.ylabel("Acc")
-# plt.xlabel("Epoch")
-#fig.legend(labels=['Train', 'Test'], bbox_to_anchor=(0, 0, 0.9, 0.5))
-# plt.show()
-
-
-# In[ ]:
-
-
-# In[ ]:

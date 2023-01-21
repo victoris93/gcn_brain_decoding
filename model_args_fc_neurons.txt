@@ -1,0 +1,10 @@
+1e-4 25 10 32 2 500 adam cel
+1e-4 25 10 32 2 550 adam cel
+1e-4 25 10 32 2 600 adam cel
+1e-4 25 10 32 2 650 adam cel
+1e-4 25 10 32 2 700 adam cel
+1e-4 25 10 32 2 750 adam cel
+1e-4 25 10 32 2 800 adam cel
+1e-4 25 10 32 2 850 adam cel
+1e-4 25 10 32 2 900 adam cel
+1e-4 25 10 32 2 100 adam cel

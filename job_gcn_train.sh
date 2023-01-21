@@ -19,7 +19,6 @@ echo the job id is $SLURM_ARRAY_JOB_ID
 echo arguments: $arg
 echo SLURM_ARRAY_TASK_ID: ${SLURM_ARRAY_TASK_ID}
 cat $args_file
-echo python3 -u gcn_optimization_cluster.py $arg
 
 python3 -u gcn_optimization_cluster.py $arg
 

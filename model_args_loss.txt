@@ -1,0 +1,3 @@
+1e-4 25 10 32 2 256 adam cel
+1e-4 25 10 32 2 256 adam neg_log
+1e-4 25 10 32 2 256 adam l1

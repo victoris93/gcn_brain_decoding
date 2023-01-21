@@ -1,0 +1,16 @@
+1e-4 25 10 50 5 500 adam cel
+1e-4 25 15 50 5 500 adam cel
+1e-4 50 10 50 5 500 adam cel
+1e-4 50 15 50 5 500 adam cel
+1e-4 70 10 50 5 500 adam cel
+1e-4 70 15 50 5 500 adam cel
+1e-4 100  10 5 500 adam cel
+1e-4 100 15 50 5 500 adam cel
+1e-4 25 10 50 4 500 adam cel
+1e-4 25 15 50 4 500 adam cel
+1e-4 50 10 50 4 500 adam cel
+1e-4 50 15 50 4 500 adam cel
+1e-4 70 10 50 4 500 adam cel
+1e-4 70 15 50 4 500 adam cel
+1e-4 100  10 4 500 adam cel
+1e-4 100 15 50 4 500 adam cel
