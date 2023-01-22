@@ -1,0 +1,12 @@
+1e-4 25 10 32 2 256 adam cel
+1e-4 25 10 32 2 256 sgd cel
+1e-4 25 10 32 2 256 adamax cel
+1e-4 25 10 32 2 256 asgd cel
+1e-4 25 10 32 2 256 rprop cel
+1e-4 25 10 32 2 256 rmsprop cel
+1e-4 25 10 32 2 256 adagrad cel
+1e-4 25 10 32 2 256 adadelta cel
+1e-4 25 10 32 2 256 radam cel
+1e-4 25 10 32 2 256 nadam cel
+1e-4 25 10 32 2 256 adamw cel
+1e-4 25 10 32 2 256 sparseadam cel

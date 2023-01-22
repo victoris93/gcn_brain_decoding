@@ -1,6 +1,0 @@
-0.02 25 10 32 2 256 adam cel
-0.02 25 32 10 2 256 adam KLDiv
-0.02 25 32 10 2 256 adam mse
-0.02 25 32 10 2 256 adam neg_log
-0.02 25 32 10 2 256 adam l1
-0.02 25 32 10 2 256 adam hinge
