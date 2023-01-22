@@ -1,5 +1,4 @@
 autograd==1.5
-brainspace==0.1.10
 certifi==2022.12.7
 charset-normalizer==2.1.1
 contourpy==1.0.6
