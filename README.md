@@ -1,5 +1,8 @@
 # Decoding Task from fMRI Activity with GCN
-
+### Authors & Contributors
+Model first implemented in [Zhang et al. (2021)](https://linkinghub.elsevier.com/retrieve/pii/S1053811921001245)
+[Sébastien Labbé](https://github.com/SebastienLabbe)
+[Victoria Shevchenko](https://github.com/victoris93)
 ## I. Different Graph Construction Method
 
 Model performance depends on the connectivity matrix used for graph construction. Prior to the main optimization pipeline, we tried:
@@ -31,3 +34,5 @@ Depending on the parameter you wish to optimize (loss, number of graph filters, 
 
 Each parameter has a separate .txt file where only the concerned parameter changes. E.g., in `model_args_loss.txt`, loss function changes each time we train a model, but the rest of parameters remain the same. 
 
+## References
+Zhang, Y., Tetrel, L., Thirion, B., & Bellec, P. (2021). Functional annotation of human cognitive states using deep graph convolution. NeuroImage, 231, 117847.
