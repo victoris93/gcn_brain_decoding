@@ -1,5 +1,16 @@
 # Decoding Task from fMRI Activity with GCN
-In this project, we optimize each argument separately:
+
+## I. Different Graph Construction Method
+
+Model performance depends on the connectivity matrix used for graph construction. Prior to the main optimization pipeline, we tried:
+1. a different subject
+2. z-transforming the connectivity matrix as done [here](https://github.com/zhangyu2ustc/gcn_tutorial_test).
+
+For the original graph construction method, refer to `gcn_decoding.ipynb`. Notebooks `gcn_decoding_2.ipynb` and `gcn_decoding_s2_z.ipynb` illustrate steps 1. and 2. To visualize and compare performance metrics for all three graph construction methods, see `compare_graph_construction.ipynb`.
+
+## II. Parallel Model Training on Cluster
+
+We optimized each argument separately:
 - loss function
 - optimizer
 - N of fully connected neurons
@@ -13,10 +24,10 @@ We used a computer cluster to train ~ 10 models in parallel for each parameter.
 
 The initial model is described [here](https://main-educational.github.io/brain_encoding_decoding/gcn_decoding.html)
 
-# Running models on a Slurm cluster
+## III. Running models on a Slurm cluster
 
-Depending on which parameter you wish to optimize (loss, number of graph filters, etc.) use the following command:
+Depending on the parameter you wish to optimize (loss, number of graph filters, etc.) use the following command:
 `sbatch --array=1-$(sed -n '$=' model_args_[parameter].txt) -o ./logs/ModelTraining-%j.out --job-name=ModelTraining -p short --constraint="skl-compat" --cpus-per-task=2 --requeue job_gcn_train.sh model_args_[parameter].txt`
 
-Each parameter has a separate .txt file which contains arguments which are identical except for the one we are trying to optimize. E.g., in `model_args_loss.txt`, loss function changes each time we train a model. 
+Each parameter has a separate .txt file where only the concerned parameter changes. E.g., in `model_args_loss.txt`, loss function changes each time we train a model, but the rest of parameters remain the same. 
 
