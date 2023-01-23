@@ -1,8 +1,7 @@
 # Decoding Task from fMRI Activity with GCN
 ### Authors & Contributors
-Model first implemented in [Zhang et al. (2021)](https://linkinghub.elsevier.com/retrieve/pii/S1053811921001245)
-Contributors:
-
+Model first implemented in [Zhang et al. (2021)](https://linkinghub.elsevier.com/retrieve/pii/S1053811921001245) <br>
+Contributors:<br>
 [Sébastien Labbé](https://github.com/SebastienLabbe)    
 [Victoria Shevchenko](https://github.com/victoris93)    
 ## I. Different Graph Construction Method
